@@ -28,10 +28,15 @@ exports.categorycreate = async (req, res, next) => {
             return;
         }
         
+        let customerId = jwtutil.userTokenData(req, 'id')
         let name = req.body.name;
         db.category.create({
             name: name,
-        }).then(() => {
+            customerId : customerId
+        },{
+            where : { customerId : customerId}
+        }
+        ).then(() => {
             restutil.returnActionSuccesResponse(res);   
         })
     }

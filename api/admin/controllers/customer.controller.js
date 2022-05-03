@@ -97,25 +97,20 @@ exports.login = async (req, res, next) => {
 };
 exports.forgetpassword = async(req, res, next) =>{
     try {
-        let email = req.body.email;
+        let id = jwtutil.userTokenData(req, 'id')
         let password = req.body.password;
         db.customer.findOne({
             where: {
-                email : email,
+                id : id,
             },
             attributes : ["email", "password"],
-        }).then((data) => 
+        }).then(() => 
         {
-            if(data != null){
-                data.update({
+                db.customer({
                     password: password,
                 })
                 restutil.returnValidationResponse(res, "Нууц үг шинэчлэгдлээ")
-            }else{
-                //user not found
-                restutil.returnValidationResponse(res, "Хэрэглэгч олдсонгүй")
-            }
-
+            
         }).catch(error => {
             console.log(error);
             next(error)

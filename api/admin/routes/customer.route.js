@@ -15,6 +15,8 @@ module.exports = function (app) {
 
     app.put('/api/admin/customer/customerinfo',jwtutil.verifyCustomer , controller.customerinfo);
 
+    app.put('/api/admin/customer/forgetpassword',jwtutil.verifyCustomer, controller.forgetpassword);
+
     //app.delete('/api/admin/customer/deletecustomer:id', controller.deletecustomer);
 
 }

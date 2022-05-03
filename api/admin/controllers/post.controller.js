@@ -20,6 +20,7 @@ exports.createpost = async(req, res, next) => {
         let qty = req.body.qty;
         let price = req.body.price;
         let order = req.body.order;
+        let categoryid = req.body.categoryid;
         
         
         db.post.create({
@@ -28,7 +29,8 @@ exports.createpost = async(req, res, next) => {
             qty : qty,
             price : price,
             order : order,
-            customerId: customerid,
+            customerId : customerid,
+            categoryId : categoryid
         }).then(newPost => {
             imageutil.multiimageupload(req,'/assets/images').then(imageaddress =>{
                 if(imageaddress == ''){

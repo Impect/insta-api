@@ -9,7 +9,7 @@ module.exports = function (app) {
     *  @apiPermission users
     **/
 
-   app.get('/api/admin/category', jwtutil.verifyAdmin,  controller.list);
+   app.get('/api/admin/category', jwtutil.verifyCustomer,  controller.list);
 
     /**
     *  @api {post} /api/admin/category categorys CREATE 
@@ -20,7 +20,7 @@ module.exports = function (app) {
     *    "name" : "name",
     * }
     **/
-    app.post('/api/admin/category/categorycreate', /*jwtutil.verifyAdmin, controller.validate('create'),*/ controller.categorycreate)
+    app.post('/api/admin/category/create',jwtutil.verifyCustomer , controller.categorycreate)
 
     /**
     *  @api {put} /api/admin/category categorys UPDATE 
@@ -32,7 +32,7 @@ module.exports = function (app) {
     *    "name" : "name",
     * }
     **/
-    // app.put('/api/admin/category', jwtutil.verifyAdmin, controller.validate('update'), controller.update);
+    app.put('/api/admin/category/update', jwtutil.verifyCustomer, controller.update);
 
 
     
@@ -41,5 +41,5 @@ module.exports = function (app) {
     *  @apiGroup categorys
     *  @apiPermission users
     **/
-    // app.delete('/api/admin/category/:id', jwtutil.verifyAdmin, controller.delete);
+     app.delete('/api/admin/category/delete/:id', jwtutil.verifyCustomer, controller.delete);
 }

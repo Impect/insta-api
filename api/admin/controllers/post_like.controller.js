@@ -33,19 +33,9 @@ exports.like = async(req, res, next) => {
 }
 exports.likelist = async(req , res, next) => {
     try {
-        let  { id } = req.params;
         db.post_like.findAll({
-            attributes : ['id','postId','customerId'],
-            where : { id: id }
+            attributes : ['id','postId','customerId']
         }).then(data => {
-            
-            db.post_like.findAll({
-                where: {
-                    postId : postId
-                },
-                attributes: ['CustomerId']
-                
-            })
             restutil.returnDataResponce(res, data);
         })
     } catch (error) { 
@@ -60,7 +50,7 @@ exports.unlike = async (req, res, next) =>{
         }).then(() => {
             db.post_like.findAll({
                 where: {
-                    postId : postId
+                    id : id
                 },
                 attributes: ['CustomerId']
                 

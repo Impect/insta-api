@@ -57,9 +57,7 @@ exports.commentupdate = async(req, res, next) => {
     try {
         let id = req.body.id;
         let text = req.body.text;
-        db.testtable.update(
-            
-            {
+        db.testtable.update({
             text: text,
             },{
                 where: { id: id }
