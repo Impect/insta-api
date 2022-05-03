@@ -42,8 +42,15 @@ exports.comment = async(req, res, next) => {
 exports.commentlist = async(req , res, next) => {
     try {
         db.post_comment.findAll({
-            attributes : ['text','postId','customerId'],
+            where :  {
+                postId : postId
+            },
+            include : [{
+                model : db.customer,
+                attributes : ['lastname','firstname','username','email','phonenumber','profileimage',]
+            }]
         }).then(data => {
+
             restutil.returnDataResponce(res, data);
         })
     } catch (error) { 
@@ -68,7 +75,7 @@ exports.commentupdate = async(req, res, next) => {
                 },
                 include : [{
                     model : db.customer,
-                    attributes : ['lastname','firstname','username','email','phonenumber','gender','birth','profileimage',]
+                    attributes : ['lastname','firstname','username','email','phonenumber','profileimage',]
                 }]
             })
             restutil.returnActionSuccesResponse(res);
