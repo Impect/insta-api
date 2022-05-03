@@ -28,7 +28,7 @@ exports.comment = async(req, res, next) => {
                 },
                 include : [{
                     model : db.customer,
-                    attributes : ['lastname','firstname','username','email','phonenumber','gender','birth','profileimage',]
+                    attributes : ['lastname','firstname','username','email','phonenumber','gender','birth','profileImage',]
                 }]
             }).then(comments=>  {
                 restutil.returnDataResponce(res, comments)

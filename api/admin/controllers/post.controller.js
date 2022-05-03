@@ -134,6 +134,85 @@ exports.postlist = async(req, res, next) => {
         }
 }
 
+//post listFindAll
+exports.myposts = async(req, res, next) => {
+    try {
+        let customerid = jwtutil.userTokenData(req, 'id');
+        db.post.findAll({
+            where : { customerid: customerid },
+            attributes : ['id', 'title','descr','qty','price','order'],
+
+            include : [{
+                model: db.post_comment,
+                attributes : ['id', 'text','customerId','createdAt','updatedAt'],
+                include :  [{
+                    model: db.customer,
+                    attributes : ['lastname','firstname','username','profileImage']
+                }]
+
+            },
+            {
+                model: db.post_like, 
+                attributes : ['id','customerId']
+            },
+            {
+                model : db.post_images,
+                attributes : ['image'],
+            },
+            {
+                model : db.customer,
+                attributes : ['id','username','email','profileImage']
+            }
+
+        ]
+
+        }).then(data => {
+            restutil.returnDataResponce(res, data);
+        })
+    } catch (error) { 
+        next(error)
+    }
+} 
+
+exports.customerpost = async(req, res, next) => {
+    try {
+        let customerId = req.body.customerId;
+        db.post.findAll({
+            where : { customerId: customerId },
+            attributes : ['id', 'title','descr','qty','price','order'],
+
+            include : [{
+                model: db.post_comment,
+                attributes : ['id', 'text','customerId','createdAt','updatedAt'],
+                include :  [{
+                    model: db.customer,
+                    attributes : ['lastname','firstname','username','profileImage']
+                }]
+
+            },
+            {
+                model: db.post_like, 
+                attributes : ['id','customerId']
+            },
+            {
+                model : db.post_images,
+                attributes : ['image'],
+            },
+            {
+                model : db.customer,
+                attributes : ['id','username','email','profileImage']
+            }
+
+        ]
+
+        }).then(data => {
+            restutil.returnDataResponce(res, data);
+        })
+    } catch (error) { 
+        next(error)
+    }
+}
+
 exports.postlistrandom = async(req, res, next) =>{
     try {
         db.post.findAll(

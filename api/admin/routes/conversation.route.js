@@ -1,7 +1,7 @@
 const jwtutil = require('../../../utils/jwt.util');
 
 module.exports = function (app) {
-    const controller = require('../controllers/customer_follow.controller')
+    const controller = require('../controllers/conversation.controller')
 
     /**
     *  @api {get} /api/admin/customer test GET ALL 
@@ -9,7 +9,13 @@ module.exports = function (app) {
     *  @apiPermission users
     **/
 
-    //app.post('/api/admin/customer/register', controller.create);
+    app.post('/api/admin/conversation/new', jwtutil.verifyCustomer , controller.newconversation);
+
+    //app.get('/api/admin/follower/myfollowers', jwtutil.verifyCustomer , controller.myfollowerlist);
+
+    //app.get('/api/admin/follower/customerfollowers', controller.customerfollowerlist);
+
+    //app.delete('/api/admin/follower/unfollow', jwtutil.verifyCustomer , controller.unfollow);
 
     //app.post('/api/admin/customer/login', controller.login);
 

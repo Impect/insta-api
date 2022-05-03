@@ -6,6 +6,8 @@ function initAdminRouters(app) {
     require('./post.route')(app);
     require('./post_comment.route')(app);
     require('./post_like.route')(app);
+    require('./customer_follow.route')(app);
+    require('./conversation.route')(app);
 
 }
 

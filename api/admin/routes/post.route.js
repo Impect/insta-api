@@ -14,6 +14,10 @@ module.exports = function (app) {
 
     app.get('/api/admin/post/list', controller.postlist); 
 
+    app.get('/api/admin/post/mypost', jwtutil.verifyCustomer , controller.myposts); 
+
+    app.get('/api/admin/post/customerpost', controller.customerpost); 
+
     app.get('/api/admin/post/listrandom', controller.postlistrandom); 
 
     app.get('/api/admin/post/listtoken', controller.postlisttoken); 

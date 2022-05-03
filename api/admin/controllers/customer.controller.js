@@ -17,7 +17,7 @@ exports.create = async(req, res, next) => {
         let username = req.body.username;
         let email = req.body.email;
         let password = req.body.password;
-        
+        let profileImage = '/assets/profileimages/profile.png';
 
         db.customer.findOne({
             where : {
@@ -32,6 +32,7 @@ exports.create = async(req, res, next) => {
                     email: email,
                     username : username,
                     password: password,
+                    profileImage : profileImage
                     
                 })
                 .then(()=>
