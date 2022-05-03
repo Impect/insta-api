@@ -50,6 +50,9 @@ exports.commentlist = async(req , res, next) => {
         next(error)
     }
 }
+
+
+
 exports.commentupdate = async(req, res, next) => {
     try {
         let id = req.body.id;
