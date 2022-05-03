@@ -1,0 +1,33 @@
+<html>
+    <title>Firebase Messaging Demo</title>
+    <body>
+        <div id="tokendiv"></div>
+       
+		<script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-messaging.js"></script>
+        <script>
+            tokenValue = document.getElementById("tokendiv");
+            const firebaseConfig = {
+                apiKey: "AIzaSyB_Uh5NEH5Bw8AIpskbZhpZ-z4YUov_fNA",
+                authDomain: "ecosongolt-9bd31.firebaseapp.com",
+                projectId: "ecosongolt-9bd31",
+                storageBucket: "ecosongolt-9bd31.appspot.com",
+                messagingSenderId: "617380084336",
+                appId: "1:617380084336:web:ed5a565dd6611bcdb752b5"
+                };
+			  // Initialize Firebase
+			  firebase.initializeApp(firebaseConfig);
+			  
+			
+            const messaging = firebase.messaging();
+            messaging.requestPermission().then(function () {
+                    return messaging.getToken()
+                }).then(function(token) {
+                    tokenValue.innerHTML = "Токен : " + token
+                })
+        </script>
+        </body>
+    </html>
