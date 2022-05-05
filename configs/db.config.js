@@ -42,6 +42,7 @@ db.customer_follow = require('../api/models/customer_follow.model')(sequelize, S
 db.post_like = require('../api/models/post_like.model')(sequelize, Sequelize);
 db.post = require('../api/models/post.model')(sequelize, Sequelize);
 db.post_images  = require('../api/models/post_images.model')(sequelize, Sequelize);
+db.post_videos = require('../api/models/post_videos.model')(sequelize, Sequelize);
 
 db.category.belongsTo(db.customer, {foreignKey: 'customerId', targetKey: 'id'});
 db.customer.hasMany(db.category, {foreignKey: 'customerId', targetKey: 'id'});
@@ -54,6 +55,9 @@ db.customer.hasMany(db.post, {foreignKey: 'customerId', targetKey: 'id'});
 
 db.post_images.belongsTo(db.post, {foreignKey: 'postId', targetKey: 'id'});
 db.post.hasMany(db.post_images, {foreignKey: 'postId', targetKey: 'id'});
+
+db.post_videos.belongsTo(db.post, {foreignKey: 'postId', targetKey: 'id'});
+db.post.hasMany(db.post_videos, {foreignKey: 'postId', targetKey: 'id'});
 
 db.customer_follow.belongsTo(db.customer, {foreignKey: 'customerId', targetKey: 'id'});
 db.customer.hasMany(db.customer_follow, {foreignKey: 'customerId', targetKey: 'id'});

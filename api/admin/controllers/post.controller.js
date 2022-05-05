@@ -32,7 +32,7 @@ exports.createpost = async(req, res, next) => {
             customerId : customerid,
             categoryId : categoryid
         }).then(newPost => {
-            imageutil.multifileupload(req,'/assets/images').then(fileaddress =>{
+            imageutil.multifileupload(req,'/assets/post/image,videos/').then(fileaddress =>{
                 if(fileaddress == ''){
                     restutil.returnValidationResponse(res, 'Файлыг заавал хавсаргах шаардлагатай')
                 }else{
@@ -73,7 +73,7 @@ exports.updatepost = async(req,res,next) =>{
                     id: id,
                     customerid : customerid
                 }}).then(()=>{
-                imageutil.multiimageupload(req , '/assets/images').then(imageaddress =>{
+                imageutil.multiimageupload(req , '/assets/post/image,videos/').then(imageaddress =>{
                
                     db.post_images.destroy({
                         where : { postId : id }
