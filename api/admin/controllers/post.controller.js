@@ -32,11 +32,11 @@ exports.createpost = async(req, res, next) => {
             customerId : customerid,
             categoryId : categoryid
         }).then(newPost => {
-            imageutil.multiimageupload(req,'/assets/images').then(imageaddress =>{
-                if(imageaddress == ''){
-                    restutil.returnValidationResponse(res, 'Зургыг заавал хавсаргах шаардлагатай')
+            imageutil.multifileupload(req,'/assets/images').then(fileaddress =>{
+                if(fileaddress == ''){
+                    restutil.returnValidationResponse(res, 'Файлыг заавал хавсаргах шаардлагатай')
                 }else{
-                    imageaddress.forEach(async element => {
+                    fileaddress.forEach(async element => {
                         await db.post_images.create({
                             image : element,
                             postId : newPost.id
@@ -217,12 +217,16 @@ exports.postlistrandom = async(req, res, next) =>{
     try {
         db.post.findAll(
             {
-            attributes : ['id', 'title','descr','qty','price','order'],
-                
+            attributes : ['id', 'title','descr','qty','price','order','createdAt','updatedAt'],
+            
             
             include : [{
                 model: db.post_comment,
-                attributes : ['id', 'text','customerId',]
+                attributes : ['id', 'text','customerId','createdAt','updatedAt'],
+                include :  [{
+                    model: db.customer,
+                    attributes : ['username','profileImage']
+                }]
             },
             {
                 model: db.post_like, 
@@ -234,7 +238,7 @@ exports.postlistrandom = async(req, res, next) =>{
             },
             {
                 model : db.customer,
-                attributes : ['username','email']
+                attributes : ['username','email','profileImage']
             },
             
 
@@ -286,6 +290,30 @@ exports.postlisttoken = async(req, res, next) =>{
             restutil.returnDataResponce(res, data);
         })
 
+    } catch (error) {
+        next(error)
+    }
+}
+
+exports.postsearch = async(req, res, next) =>{
+    try {
+        let title = req.body.title;
+        db.post.findAll({
+            where : { title : title }
+        }).then((data)=>{
+            restutil.returnActionSuccesResponse(res, data)
+            // if(data ==  ''){
+            //     restutil.returnValidationResponse(res)    
+            // }else
+            // {  
+            //     db.customer.findAll({
+            //         where : { username : title }
+            //     }).then(()=>(
+            //         restutil.returnActionSuccesResponse(res, data)
+            //     ))
+            // }
+            
+        })
     } catch (error) {
         next(error)
     }

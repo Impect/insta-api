@@ -32,3 +32,16 @@ exports.newconversation = async(req, res, next) =>{
         next(error)
     }
 }
+exports.deleteconversation = async(req, res, next) =>{
+    try {
+        let customerId = jwtutil.userTokenData(req, 'id');
+        let chatterId = req.body.chatterId;
+        db.conversation.destroy({
+            where : { customerId : customerId, customerId1 : chatterId }
+        }).then(()=>{
+            restutil.returnActionSuccesResponse(res);
+        })
+    } catch (error) {
+        next(error)
+    }
+}

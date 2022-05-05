@@ -24,7 +24,7 @@ module.exports = function (app) {
 
     app.put('/api/admin/post/updatepost', jwtutil.verifyCustomer, controller.updatepost);
 
-    //app.get('/api/admin/post/list/getid', controller.postgetid); 
+    app.get('/api/admin/post/search', controller.postsearch); 
 
     app.put('/api/admin/post/uploadtestimage/:id', controller.uploadtestimage)
 

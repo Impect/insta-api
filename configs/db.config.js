@@ -77,8 +77,8 @@ db.customer.hasMany(db.conversation, {foreignKey: 'customerId1', targetKey: 'id'
 
 db.conversation_detail.belongsTo(db.customer, {foreignKey: 'customerId', targetKey: 'id'});
 db.customer.hasMany(db.conversation_detail, {foreignKey: 'customerId', targetKey: 'id'});
-db.conversation.belongsTo(db.customer, {foreignKey: 'conversationId', targetKey: 'id'});
-db.customer.hasMany(db.conversation, {foreignKey: 'conversationId', targetKey: 'id'});
+db.conversation_detail.belongsTo(db.conversation, {foreignKey: 'conversationId', targetKey: 'id'});
+db.conversation.hasMany(db.conversation_detail, {foreignKey: 'conversationId', targetKey: 'id'});
 
 
 db.Sequelize = Sequelize;

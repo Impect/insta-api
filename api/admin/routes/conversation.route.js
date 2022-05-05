@@ -11,11 +11,11 @@ module.exports = function (app) {
 
     app.post('/api/admin/conversation/new', jwtutil.verifyCustomer , controller.newconversation);
 
+    app.delete('/api/admin/conversation/delete', jwtutil.verifyCustomer , controller.deleteconversation);
+
     //app.get('/api/admin/follower/myfollowers', jwtutil.verifyCustomer , controller.myfollowerlist);
 
     //app.get('/api/admin/follower/customerfollowers', controller.customerfollowerlist);
-
-    //app.delete('/api/admin/follower/unfollow', jwtutil.verifyCustomer , controller.unfollow);
 
     //app.post('/api/admin/customer/login', controller.login);
 

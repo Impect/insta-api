@@ -11,6 +11,7 @@ const { app } = require('firebase-admin');
 const encyptionutil = require('../../../utils/encryption.util');
 const encryptionkey = require('../../../configs/env/secret.env');
 const imageutil = require('../../../utils/image.util');
+const { password } = require('../../../configs/env/db.env');
 
 exports.create = async(req, res, next) => {
     try {
@@ -96,27 +97,27 @@ exports.login = async (req, res, next) => {
         next(error);
     }
 };
-exports.forgetpassword = async(req, res, next) =>{
+
+exports.forgetpassword = async (req, res, next) => {
     try {
-        let id = jwtutil.userTokenData(req, 'id')
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
+
+        let id = jwtutil.userTokenData(req, 'id');
+        let oldpassword = req.body.oldpassword;
         let password = req.body.password;
-        db.customer.findOne({
-            where: {
-                id : id,
-            },
-            attributes : ["email", "password"],
-        }).then(() => 
-        {
-                db.customer({
-                    password: password,
-                })
-                restutil.returnValidationResponse(res, "Нууц үг шинэчлэгдлээ")
-            
-        }).catch(error => {
-            console.log(error);
-            next(error)
-        });
-    } catch (error) {
+        db.customer.update({
+            password: password
+        },{
+            where: { id : id , password: oldpassword }
+        }).then(() => {
+            restutil.returnActionSuccesResponse(res);
+        })
+    }
+    catch (error) {
         next(error);
     }
 }
