@@ -5,7 +5,7 @@ module.exports = function (app) {
 
     /**
     *  @api {get} /api/admin/category categorys GET ALL 
-    *  @apiGroup categorys
+    *  @apiGroup CATEGORY
     *  @apiPermission users
     **/
 
@@ -13,18 +13,18 @@ module.exports = function (app) {
 
     /**
     *  @api {post} /api/admin/category categorys CREATE 
-    *  @apiGroup categorys
+    *  @apiGroup CATEGORY
     *  @apiPermission users
     *  @apiParamExample {json} Input
     * {
     *    "name" : "name",
     * }
     **/
-    app.post('/api/admin/category/create',jwtutil.verifyCustomer , controller.categorycreate)
+    app.post('/api/admin/category/create',jwtutil.verifyCustomer, controller.validate('create'), controller.categorycreate)
 
     /**
     *  @api {put} /api/admin/category categorys UPDATE 
-    *  @apiGroup categorys
+    *  @apiGroup CATEGORY
     *  @apiPermission users
     *  @apiParamExample {json} Input
     * {
@@ -32,13 +32,13 @@ module.exports = function (app) {
     *    "name" : "name",
     * }
     **/
-    app.put('/api/admin/category/update', jwtutil.verifyCustomer, controller.update);
+    app.put('/api/admin/category/update', jwtutil.verifyCustomer, controller.validate('update'), controller.update);
 
 
     
     /**
     *  @api {delete} /api/admin/category/{id} categorys DELETE 
-    *  @apiGroup categorys
+    *  @apiGroup CATEGORY
     *  @apiPermission users
     **/
      app.delete('/api/admin/category/delete/:id', jwtutil.verifyCustomer, controller.delete);

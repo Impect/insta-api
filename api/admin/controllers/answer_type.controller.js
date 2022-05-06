@@ -8,6 +8,11 @@ const jwtutil = require('../../../utils/jwt.util');
 
 exports.list = async(req, res, next) =>{
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
        db.answer_type.findAll({
         attributes : ['id', 'name', 'createdAt'],
         order : [[
@@ -68,6 +73,11 @@ exports.update = async (req, res, next) => {
 
 exports.delete = async (req, res, next) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         let { id } = req.params;
         db.answer_type.destroy({
          where : { id : id}

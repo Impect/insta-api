@@ -11,6 +11,11 @@ const imageutil = require('../../../utils/image.util');
 
 exports.comment = async(req, res, next) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         let customerId = jwtutil.userTokenData(req, 'id');
         let text = req.body.text;
         let postId = req.body.postId;
@@ -41,6 +46,11 @@ exports.comment = async(req, res, next) => {
 }
 exports.commentlist = async(req , res, next) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         db.post_comment.findAll({
             attributes : ['text','postId','customerId'],
         }).then(data => {
@@ -55,6 +65,11 @@ exports.commentlist = async(req , res, next) => {
 
 exports.commentupdate = async(req, res, next) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         let id = req.body.id;
         let text = req.body.text;
         db.testtable.update({
@@ -83,6 +98,11 @@ exports.commentupdate = async(req, res, next) => {
 
 exports.commentdelete = async (req, res, next) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         let { id } = req.params;
         db.post_comment.destroy({
          where : { id : id }

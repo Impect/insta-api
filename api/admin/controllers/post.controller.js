@@ -14,13 +14,17 @@ const imageutil = require('../../../utils/image.util');
 // post create
 exports.createpost = async(req, res, next) => {
     try {
-        let customerid = jwtutil.userTokenData(req, 'id');
-        let title = req.body.title;
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
+        let customerId = jwtutil.userTokenData(req, 'id');
         let descr = req.body.descr;
         let qty = req.body.qty;
         let price = req.body.price;
         let order = req.body.order;
-        let categoryid = req.body.categoryid;
+        let categoryId = req.body.categoryId;
         
         
         db.post.create({
@@ -29,10 +33,10 @@ exports.createpost = async(req, res, next) => {
             qty : qty,
             price : price,
             order : order,
-            customerId : customerid,
-            categoryId : categoryid
+            customerId : customerId,
+            categoryId : categoryId
         }).then(newPost => {
-            imageutil.multifileupload(req,'/assets/post/image,videos/').then(fileaddress =>{
+            imageutil.multifileupload(req,'/assets/post/image_videos/').then(fileaddress =>{
                 if(fileaddress == ''){
                     restutil.returnValidationResponse(res, 'Файлыг заавал хавсаргах шаардлагатай')
                 }else{
@@ -53,6 +57,11 @@ exports.createpost = async(req, res, next) => {
 
 exports.updatepost = async(req,res,next) =>{
         try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
             let customerid = jwtutil.userTokenData(req, 'id');
             let title = req.body.title;
             let descr = req.body.descr;
@@ -73,7 +82,7 @@ exports.updatepost = async(req,res,next) =>{
                     id: id,
                     customerid : customerid
                 }}).then(()=>{
-                imageutil.multiimageupload(req , '/assets/post/image,videos/').then(imageaddress =>{
+                imageutil.multiimageupload(req , '/assets/post/image_videos/').then(imageaddress =>{
                
                     db.post_images.destroy({
                         where : { postId : id }
@@ -96,20 +105,42 @@ exports.updatepost = async(req,res,next) =>{
         }
 }
 
+exports.deletepost = async(req, res, next) => {
+    try {
+        let customerid = jwtutil.userTokenData(req, 'id');
+        let { id } = req.params;
+
+        db.post.destroy({
+            where : { id : id, customerid : customerid }
+        }).then((data)=>{
+            db.post_images({
+                where : { postId : data.id }
+            })
+            restutil.returnActionSuccesResponse(res);
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 //post listFindAll
 exports.postlist = async(req, res, next) => {
         try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
             db.post.findAll({
-                attributes : ['id', 'title','descr','qty','price','order'],
+                attributes : ['id', 'title','descr','qty','price','order','createdAt','updatedAt'],
 
                 include : [{
                     model: db.post_comment,
                     attributes : ['id', 'text','customerId','createdAt','updatedAt'],
                     include :  [{
                         model: db.customer,
-                        attributes : ['lastname','firstname','username','profileImage']
+                        attributes : ['username','profileImage']
                     }]
-
                 },
                 {
                     model: db.post_like, 
@@ -123,7 +154,6 @@ exports.postlist = async(req, res, next) => {
                     model : db.customer,
                     attributes : ['id','username','email','profileImage']
                 }
-
             ]
 
             }).then(data => {
@@ -137,6 +167,11 @@ exports.postlist = async(req, res, next) => {
 //post listFindAll
 exports.myposts = async(req, res, next) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         let customerid = jwtutil.userTokenData(req, 'id');
         db.post.findAll({
             where : { customerid: customerid },
@@ -149,7 +184,6 @@ exports.myposts = async(req, res, next) => {
                     model: db.customer,
                     attributes : ['lastname','firstname','username','profileImage']
                 }]
-
             },
             {
                 model: db.post_like, 
@@ -163,9 +197,7 @@ exports.myposts = async(req, res, next) => {
                 model : db.customer,
                 attributes : ['id','username','email','profileImage']
             }
-
         ]
-
         }).then(data => {
             restutil.returnDataResponce(res, data);
         })
@@ -176,6 +208,11 @@ exports.myposts = async(req, res, next) => {
 
 exports.customerpost = async(req, res, next) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         let customerId = req.body.customerId;
         db.post.findAll({
             where : { customerId: customerId },
@@ -215,6 +252,11 @@ exports.customerpost = async(req, res, next) => {
 
 exports.postlistrandom = async(req, res, next) =>{
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         db.post.findAll(
             {
             attributes : ['id', 'title','descr','qty','price','order','createdAt','updatedAt'],
@@ -259,6 +301,11 @@ exports.postlistrandom = async(req, res, next) =>{
 
 exports.postlisttoken = async(req, res, next) =>{
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         let customerid = jwtutil.userTokenData(req, 'id');
         db.post.findAll(
             {
@@ -297,6 +344,11 @@ exports.postlisttoken = async(req, res, next) =>{
 
 exports.postsearch = async(req, res, next) =>{
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         let title = req.body.title;
         db.post.findAll({
             where : { title : title }
@@ -323,6 +375,11 @@ exports.postsearch = async(req, res, next) =>{
 
 exports.uploadtestimage = async(req, res, next) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
 
         let p_id = req.params.id;
 
@@ -367,5 +424,37 @@ exports.uploadtestimage = async(req, res, next) => {
 
     } catch (error) {
         
+    }
+}
+
+exports.validate = (method) => {
+    switch (method) {
+        case 'createpost': {
+            return [
+
+                body('descr','Тайлбараа оруулна уу.').notEmpty(),
+                body('qty','Тоо ширхэгээ оруулна уу.').notEmpty(),
+                body('qty','Тоо оруулна уу.').isNumeric(),
+                body('price', 'Үнэ оруулна уу.').notEmpty(),
+                body('price','Тоо оруулна уу.').isNumeric(),
+                body('order','order хэсгийн мэдээллийг оруулна уу.').notEmpty(),
+                body('order','Тоо оруулна уу.').isNumeric(),
+                
+            ]
+        }
+        case 'updatepost': {
+            return [
+                body('title','Гарчигаа оруулна уу.').notEmpty(),
+                body('descr','Тайлбараа оруулна уу.').notEmpty(),
+                body('qty','Тоо ширхэгээ оруулна уу.').notEmpty(),
+                body('qty','Тоо оруулна уу.').isNumeric(),
+                body('price', 'Үнэ оруулна уу.').notEmpty(),
+                body('price','Тоо оруулна уу.').isNumeric(),
+                body('order','order хэсгийн мэдээллийг оруулна уу.').notEmpty(),
+                body('order','Тоо оруулна уу.').isNumeric(),
+                body('id','Постны Id-г оруулна уу.')
+
+            ]
+        }
     }
 }

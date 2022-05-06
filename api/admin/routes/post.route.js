@@ -9,8 +9,7 @@ module.exports = function (app) {
     *  @apiPermission users
     **/
 
-    app.post('/api/admin/post/create',jwtutil.verifyCustomer, controller.createpost);
-
+    app.post('/api/admin/post/create', jwtutil.verifyCustomer , controller.validate('createpost') , controller.createpost);
 
     app.get('/api/admin/post/list', controller.postlist); 
 
@@ -22,11 +21,13 @@ module.exports = function (app) {
 
     app.get('/api/admin/post/listtoken', controller.postlisttoken); 
 
-    app.put('/api/admin/post/updatepost', jwtutil.verifyCustomer, controller.updatepost);
+    app.put('/api/admin/post/updatepost', jwtutil.verifyCustomer, controller.validate('createpost'), controller.updatepost);
 
     app.get('/api/admin/post/search', controller.postsearch); 
 
-    app.put('/api/admin/post/uploadtestimage/:id', controller.uploadtestimage)
+    app.put('/api/admin/post/uploadtestimage/:id', controller.uploadtestimage);
+
+    app.delete('/api/admin/post/delete/:id',jwtutil.verifyCustomer, controller.deletepost);
 
     //app.post('/api/admin/customer/login', controller.login);
 

@@ -29,6 +29,11 @@ exports.register = async(req, res, next) => {
 }
 exports.list = async(req, res, next) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         db.testtable.findAll({
             attributes : ['id', 'mail', 'password']
         }).then(data => {

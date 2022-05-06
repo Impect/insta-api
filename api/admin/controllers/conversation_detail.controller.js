@@ -14,6 +14,11 @@ const { text } = require('express');
 
 exports.textconversation = async(req, res, next) =>{
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         let customerId = jwtutil.userTokenData(req, 'id');
         let text = req.body.text;
         let conversationId = req.body.conversationId;
@@ -49,6 +54,11 @@ exports.textconversation = async(req, res, next) =>{
 }
 exports.textdeleteconversation = async(req, res, next) =>{
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         let customerId = jwtutil.userTokenData(req, 'id');
         let id = req.body.id;
         let conversationId = req.body.conversationId;

@@ -11,6 +11,11 @@ const imageutil = require('../../../utils/image.util');
 
 exports.like = async(req, res, next) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         let customerId = jwtutil.userTokenData(req, 'id')
         let postId = req.body.postId;
         
@@ -33,6 +38,11 @@ exports.like = async(req, res, next) => {
 }
 exports.likelist = async(req , res, next) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         db.post_like.findAll({
             attributes : ['id','postId','customerId']
         }).then(data => {
@@ -44,6 +54,11 @@ exports.likelist = async(req , res, next) => {
 }
 exports.unlike = async (req, res, next) =>{
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         let { id } = req.params;
         db.post_like.destroy({
             where : { id : id }

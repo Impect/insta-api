@@ -1,6 +1,5 @@
 function initAdminRouters(app) {
     require('./category.route')(app);
-    require('./test_route')(app);
     require('./customer.route')(app);
     require('./customer.route')(app);
     require('./post.route')(app);
@@ -9,7 +8,9 @@ function initAdminRouters(app) {
     require('./customer_follow.route')(app);
     require('./conversation.route')(app);
     require('./conversation_detail.route')(app);
-
+    require('./story.route')(app);
+    require('./customer_profile.route')(app);
+    
 }
 
 module.exports = initAdminRouters;

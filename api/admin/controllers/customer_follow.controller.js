@@ -13,6 +13,7 @@ const imageutil = require('../../../utils/image.util');
 
 exports.follow = async (req, res, next) => {
     try {
+        
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             restutil.returnValidationResponse(res, errors.array());
@@ -36,6 +37,12 @@ exports.follow = async (req, res, next) => {
 
 exports.myfollowerlist = async(req, res, next) =>{
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
+        
         let customerId = jwtutil.userTokenData(req, 'id');
         db.customer_follow.findAll({
         attributes : ['id','followerId','customerId'],
@@ -51,6 +58,11 @@ exports.myfollowerlist = async(req, res, next) =>{
 
 exports.customerfollowerlist = async(req, res, next) =>{
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         let customerId = req.body.customerId;
         db.customer_follow.findAll({
         attributes : ['id','followerId','customerId'],
@@ -66,6 +78,11 @@ exports.customerfollowerlist = async(req, res, next) =>{
 
 exports.unfollow = async (req, res, next) =>{
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         
         let followerId = req.body.followerId;
         let customerId = jwtutil.userTokenData(req, 'id'); 
@@ -79,3 +96,4 @@ exports.unfollow = async (req, res, next) =>{
         next(error)
     }
 }
+

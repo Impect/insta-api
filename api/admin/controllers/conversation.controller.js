@@ -13,6 +13,11 @@ const imageutil = require('../../../utils/image.util');
 
 exports.newconversation = async(req, res, next) =>{
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         let customerId = jwtutil.userTokenData(req, 'id');
         let chatterId = req.body.chatterId;
 
@@ -34,6 +39,11 @@ exports.newconversation = async(req, res, next) =>{
 }
 exports.deleteconversation = async(req, res, next) =>{
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            restutil.returnValidationResponse(res, errors.array());
+            return;
+        }
         let customerId = jwtutil.userTokenData(req, 'id');
         let chatterId = req.body.chatterId;
         db.conversation.destroy({
